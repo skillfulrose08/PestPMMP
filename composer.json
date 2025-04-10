@@ -1,0 +1,19 @@
+{
+    "name": "refaltor/pest-pmmp-tests",
+    "description": "Little library for create unit test in PocketMine",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Refaltor\\PestPmmpTests\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Refaltor",
+            "email": "contact@shulkerstudio.com"
+        }
+    ],
+    "require": {
+        "pocketmine/pocketmine-mp": "^5.27"
+    }
+}
