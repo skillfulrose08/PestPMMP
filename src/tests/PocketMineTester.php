@@ -49,4 +49,44 @@ class PocketMineTester
             ->setUuid(Uuid::uuid4())
             ->build());
     }
+
+    public static function launchTest(string $dir): void
+    {
+        try {
+            $files = glob($dir . '/*Test.php');
+
+            foreach ($files as $file) {
+                require_once $file;
+
+                $declaredClassesBefore = get_declared_classes();
+                include_once $file;
+                $declaredClassesAfter = get_declared_classes();
+
+                $newClasses = array_diff($declaredClassesAfter, $declaredClassesBefore);
+
+                foreach ($newClasses as $class) {
+                    $reflection = new \ReflectionClass($class);
+
+                    if ($reflection->isInstantiable()) {
+                        $instance = $reflection->newInstance();
+                        self::getPlugin()->getLogger()->info("§aSTART TEST IN : " . $instance->getName());
+                        sleep(2);
+                        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
+                            if (str_starts_with($method->getName(), 'test')) {
+                                $isValid = $method->invoke($instance);
+                                if ($isValid) {
+                                    self::getPlugin()->getLogger()->info("§aTest : " . $method->getName() . " | GOOD");
+                                } else {
+                                    self::getPlugin()->getLogger()->info("§cTest : " . $method->getName() . " | FAILED");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (\Throwable $th) {
+            self::getPlugin()->getLogger()->error("Units test failed. Please check PestPMMP installation.");
+            self::getPlugin()->getServer()->shutdown();
+        }
+    }
 }
