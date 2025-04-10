@@ -50,7 +50,7 @@ class PocketMineTester
             ->build());
     }
 
-    public static function launchTest(string $dir): void
+    public static function launchTest(string $dir, string $namespace): void
     {
         try {
             $files = glob($dir . '/*Test.php');
@@ -58,35 +58,34 @@ class PocketMineTester
             foreach ($files as $file) {
                 require_once $file;
 
-                $declaredClassesBefore = get_declared_classes();
-                include_once $file;
-                $declaredClassesAfter = get_declared_classes();
+                // On suppose que le nom de la classe = nom du fichier sans extension
+                $className = $namespace . basename($file, '.php');
 
-                $newClasses = array_diff($declaredClassesAfter, $declaredClassesBefore);
+                if (!class_exists($className)) {
+                    self::getPlugin()->getLogger()->warning("§eClass $className not found in $file");
+                    continue;
+                }
 
-                foreach ($newClasses as $class) {
-                    $reflection = new \ReflectionClass($class);
+                $testInstance = new $className();
 
-                    if ($reflection->isInstantiable()) {
-                        $instance = $reflection->newInstance();
-                        self::getPlugin()->getLogger()->info("§aSTART TEST IN : " . $instance->getName());
-                        sleep(2);
-                        foreach ($reflection->getMethods(\ReflectionMethod::IS_PUBLIC) as $method) {
-                            if (str_starts_with($method->getName(), 'test')) {
-                                $isValid = $method->invoke($instance);
-                                if ($isValid) {
-                                    self::getPlugin()->getLogger()->info("§aTest : " . $method->getName() . " | GOOD");
-                                } else {
-                                    self::getPlugin()->getLogger()->info("§cTest : " . $method->getName() . " | FAILED");
-                                }
-                            }
+                self::getPlugin()->getLogger()->info("§aSTART TEST IN : " . $className);
+                sleep(1);
+
+                foreach (get_class_methods($testInstance) as $method) {
+                    if (str_ends_with($method, 'test')) {
+                        $isValid = $testInstance->$method();
+                        if ($isValid) {
+                            self::getPlugin()->getLogger()->info("§aTest : " . $method . " | GOOD");
+                        } else {
+                            self::getPlugin()->getLogger()->info("§cTest : " . $method . " | FAILED");
                         }
                     }
                 }
             }
         } catch (\Throwable $th) {
-            self::getPlugin()->getLogger()->error("Units test failed. Please check PestPMMP installation.");
+            self::getPlugin()->getLogger()->error("§cUnit tests failed: " . $th->getMessage());
             self::getPlugin()->getServer()->shutdown();
         }
     }
+
 }
