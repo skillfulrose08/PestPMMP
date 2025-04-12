@@ -77,7 +77,7 @@ class PocketMineTester
                                     yield from $testInstance->$method();
                                     self::getPlugin()->getLogger()->info("§aTest : " . $method . " | ✅");
                                 } catch (\Exception $e) {
-                                    self::getPlugin()->getLogger()->info("§cTest : " . $method . " | 🟥 : " . $e->getMessage());
+                                    self::getPlugin()->getLogger()->info("§cTest : " . $method . " | 🟥 : " . $e->getMessage() . " | Line : " . $e->getLine());
                                 }
                             });
                         }
