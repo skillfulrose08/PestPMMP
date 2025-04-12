@@ -1,7 +1,8 @@
 {
     "name": "refaltor/pest-pmmp-tests",
-    "description": "Little library for create unit test in PocketMine",
+    "description": "Little library for create unit test in PocketMine with Await Generator.",
     "type": "library",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
             "Refaltor\\PestPmmpTests\\": "src/"
