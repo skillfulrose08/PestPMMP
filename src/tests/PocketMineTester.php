@@ -24,7 +24,7 @@ class PocketMineTester
         }
     }
 
-    private static function getFakePlayerPlugin(): Plugin|Loader
+    public static function getFakePlayerPlugin(): Plugin|Loader
     {
         return self::getPlugin()->getServer()->getPluginManager()->getPlugin("FakePlayer");
     }
