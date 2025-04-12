@@ -69,4 +69,60 @@ trait ValidatorTrait
             throw new LengthException("String length must be at most '$max', but got " . strlen($value) . ".");
         }
     }
+
+    // Nouvelle méthode pour vérifier si une valeur est une instance d'une classe donnée
+    public function assertIsInstanceOf(object $object, string $className): void
+    {
+        if (!$object instanceof $className) {
+            throw new InvalidArgumentException("Expected instance of '$className', but got " . get_class($object) . ".");
+        }
+    }
+
+    // Nouvelle méthode pour vérifier si une valeur est de type booléen
+    public function assertIsBool($value): void
+    {
+        if (!is_bool($value)) {
+            throw new InvalidArgumentException("Expected a boolean, but got " . gettype($value) . ".");
+        }
+    }
+
+    // Nouvelle méthode pour vérifier si une valeur est un tableau
+    public function assertIsArray($value): void
+    {
+        if (!is_array($value)) {
+            throw new InvalidArgumentException("Expected an array, but got " . gettype($value) . ".");
+        }
+    }
+
+    // Nouvelle méthode pour vérifier si une valeur est un entier
+    public function assertIsInt($value): void
+    {
+        if (!is_int($value)) {
+            throw new InvalidArgumentException("Expected an integer, but got " . gettype($value) . ".");
+        }
+    }
+
+    // Nouvelle méthode pour vérifier que deux valeurs sont égales
+    public function assertEquals($expected, $actual): void
+    {
+        if ($expected !== $actual) {
+            throw new InvalidArgumentException("Expected '$expected', but got '$actual'.");
+        }
+    }
+
+    // Nouvelle méthode pour vérifier que la valeur est vide
+    public function assertEmpty($value): void
+    {
+        if (!empty($value)) {
+            throw new InvalidArgumentException("Expected an empty value, but got '$value'.");
+        }
+    }
+
+    // Nouvelle méthode pour vérifier que la valeur n'est pas vide
+    public function assertNotEmpty($value): void
+    {
+        if (empty($value)) {
+            throw new InvalidArgumentException("Expected a non-empty value, but got an empty one.");
+        }
+    }
 }
