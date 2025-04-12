@@ -67,23 +67,22 @@ class PocketMineTester
                     continue;
                 }
 
-                $testInstance = new $className();
+                $testInstance = new $className(function (PmmpTest $testInstance) use ($className) {
+                    self::getPlugin()->getLogger()->info("§aSTART TEST IN : " . $className);
 
-                self::getPlugin()->getLogger()->info("§aSTART TEST IN : " . $className);
-                sleep(1);
-
-                foreach (get_class_methods($testInstance) as $method) {
-                    if (str_ends_with($method, 'test')) {
-                        Await::f2c(function () use ($testInstance, $method) {
-                            try {
-                                yield from $testInstance->$method();
-                                self::getPlugin()->getLogger()->info("§aTest : " . $method . " | ✅");
-                            } catch (\Exception $e) {
-                                self::getPlugin()->getLogger()->info("§cTest : " . $method . " | 🟥 : " . $e->getMessage());
-                            }
-                        });
+                    foreach (get_class_methods($testInstance) as $method) {
+                        if (str_ends_with($method, 'test')) {
+                            Await::f2c(function () use ($testInstance, $method) {
+                                try {
+                                    yield from $testInstance->$method();
+                                    self::getPlugin()->getLogger()->info("§aTest : " . $method . " | ✅");
+                                } catch (\Exception $e) {
+                                    self::getPlugin()->getLogger()->info("§cTest : " . $method . " | 🟥 : " . $e->getMessage());
+                                }
+                            });
+                        }
                     }
-                }
+                });
             }
         } catch (\Throwable $th) {
             self::getPlugin()->getLogger()->error("§cUnit tests failed: " . $th->getMessage());
