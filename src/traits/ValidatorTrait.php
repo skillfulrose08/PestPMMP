@@ -125,4 +125,9 @@ trait ValidatorTrait
             throw new InvalidArgumentException("Expected a non-empty value, but got an empty one.");
         }
     }
+
+    public function crashThisTest(string $error): void
+    {
+        throw new InvalidArgumentException($error);
+    }
 }
