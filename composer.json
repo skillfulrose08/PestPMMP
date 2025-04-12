@@ -15,7 +15,9 @@
         }
     ],
     "require": {
-        "pocketmine/pocketmine-mp": "^5.27",
         "sof3/await-generator": "^3.6"
+    },
+    "require-dev": {
+        "pocketmine/pocketmine-mp": "^5.27"
     }
 }
