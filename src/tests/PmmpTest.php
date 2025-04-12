@@ -15,6 +15,7 @@ abstract class PmmpTest
 
     public function __construct(callable $callback)
     {
+        $this->onBeforeAllTest();
         PocketMineTester::createFakePlayer("FAKEPLAYER")->onCompletion(function(Player $player)  use ($callback) {
             $this->fakePlayer = $player;
             (new PlayerJoinEvent(
@@ -40,4 +41,7 @@ abstract class PmmpTest
     {
         $this->fakePlayer = $fakePlayer;
     }
+
+    abstract public function onBeforeAllTest (): void;
+    abstract public function onAfterAllTest (): void;
 }

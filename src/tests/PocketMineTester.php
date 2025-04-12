@@ -69,13 +69,17 @@ class PocketMineTester
 
                 $testInstance = new $className(function (PmmpTest $testInstance) use ($className) {
                     self::getPlugin()->getLogger()->info("§aSTART TEST IN : " . $className);
-
+                    $methodCount = count(get_class_methods($testInstance));
                     foreach (get_class_methods($testInstance) as $method) {
                         if (str_ends_with($method, 'test')) {
-                            Await::f2c(function () use ($testInstance, $method) {
+                            $methodCount--;
+                            Await::f2c(function () use ($testInstance, $method, $methodCount) {
                                 try {
                                     yield from $testInstance->$method();
                                     self::getPlugin()->getLogger()->info("§aTest : " . $method . " | ✅");
+                                    if ($methodCount <= 0) {
+                                        $testInstance->onAfterAllTest();
+                                    }
                                 } catch (\Exception $e) {
                                     self::getPlugin()->getLogger()->info("§cTest : " . $method . " | 🟥 : " . $e->getMessage() . " | Line : " . $e->getLine() . ' | File : ' . $e->getFile());
                                 }
