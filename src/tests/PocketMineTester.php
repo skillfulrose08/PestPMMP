@@ -8,6 +8,7 @@ use pocketmine\plugin\Plugin;
 use pocketmine\plugin\PluginBase;
 use pocketmine\promise\Promise;
 use Ramsey\Uuid\Uuid;
+use SOFe\AwaitGenerator\Await;
 
 class PocketMineTester
 {
@@ -73,12 +74,14 @@ class PocketMineTester
 
                 foreach (get_class_methods($testInstance) as $method) {
                     if (str_ends_with($method, 'test')) {
-                        try {
-                            $testInstance->$method();
-                            self::getPlugin()->getLogger()->info("§aTest : " . $method . " | ✅");
-                        } catch (\Exception $e) {
-                            self::getPlugin()->getLogger()->info("§cTest : " . $method . " | 🟥 : " . $e->getMessage());
-                        }
+                        Await::f2c(function () use ($testInstance, $method) {
+                            try {
+                                yield from $testInstance->$method();
+                                self::getPlugin()->getLogger()->info("§aTest : " . $method . " | ✅");
+                            } catch (\Exception $e) {
+                                self::getPlugin()->getLogger()->info("§cTest : " . $method . " | 🟥 : " . $e->getMessage());
+                            }
+                        });
                     }
                 }
             }
