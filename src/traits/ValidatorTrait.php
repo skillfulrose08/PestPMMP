@@ -2,50 +2,71 @@
 
 namespace Refaltor\PestPmmpTests\traits;
 
+use InvalidArgumentException;
+use LengthException;
+
 trait ValidatorTrait
 {
-    public function assertString(string $expected, string $actual): bool
+    public function assertString(string $expected, string $actual): void
     {
-        return $actual === $expected;
+        if ($actual !== $expected) {
+            throw new InvalidArgumentException("Expected '$expected', but got '$actual'.");
+        }
     }
 
-    public function assertNotEmptyString(string $value): bool
+    public function assertNotEmptyString(string $value): void
     {
-        return trim($value) !== '';
+        if (trim($value) === '') {
+            throw new InvalidArgumentException("String is empty.");
+        }
     }
 
-    public function assertContainsString(string $needle, string $haystack): bool
+    public function assertContainsString(string $needle, string $haystack): void
     {
-        return str_contains($haystack, $needle);
+        if (!str_contains($haystack, $needle)) {
+            throw new InvalidArgumentException("The string '$haystack' does not contain '$needle'.");
+        }
     }
 
-    public function assertStartsWith(string $prefix, string $string): bool
+    public function assertStartsWith(string $prefix, string $string): void
     {
-        return str_starts_with($string, $prefix);
+        if (!str_starts_with($string, $prefix)) {
+            throw new InvalidArgumentException("The string '$string' does not start with '$prefix'.");
+        }
     }
 
-    public function assertEndsWith(string $suffix, string $string): bool
+    public function assertEndsWith(string $suffix, string $string): void
     {
-        return str_ends_with($string, $suffix);
+        if (!str_ends_with($string, $suffix)) {
+            throw new InvalidArgumentException("The string '$string' does not end with '$suffix'.");
+        }
     }
 
-    public function assertRegexMatch(string $pattern, string $subject): bool
+    public function assertRegexMatch(string $pattern, string $subject): void
     {
-        return preg_match($pattern, $subject) === 1;
+        if (preg_match($pattern, $subject) !== 1) {
+            throw new InvalidArgumentException("The string '$subject' does not match the pattern '$pattern'.");
+        }
     }
 
-    public function assertLength(string $value, int $expectedLength): bool
+    public function assertLength(string $value, int $expectedLength): void
     {
-        return strlen($value) === $expectedLength;
+        if (strlen($value) !== $expectedLength) {
+            throw new LengthException("Expected length '$expectedLength', but got " . strlen($value) . ".");
+        }
     }
 
-    public function assertMinLength(string $value, int $min): bool
+    public function assertMinLength(string $value, int $min): void
     {
-        return strlen($value) >= $min;
+        if (strlen($value) < $min) {
+            throw new LengthException("String length must be at least '$min', but got " . strlen($value) . ".");
+        }
     }
 
-    public function assertMaxLength(string $value, int $max): bool
+    public function assertMaxLength(string $value, int $max): void
     {
-        return strlen($value) <= $max;
+        if (strlen($value) > $max) {
+            throw new LengthException("String length must be at most '$max', but got " . strlen($value) . ".");
+        }
     }
 }

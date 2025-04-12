@@ -73,11 +73,11 @@ class PocketMineTester
 
                 foreach (get_class_methods($testInstance) as $method) {
                     if (str_ends_with($method, 'test')) {
-                        $isValid = $testInstance->$method();
-                        if ($isValid) {
-                            self::getPlugin()->getLogger()->info("§aTest : " . $method . " | GOOD");
-                        } else {
-                            self::getPlugin()->getLogger()->info("§cTest : " . $method . " | FAILED");
+                        try {
+                            $testInstance->$method();
+                            self::getPlugin()->getLogger()->info("§aTest : " . $method . " | ✅");
+                        } catch (\Exception $e) {
+                            self::getPlugin()->getLogger()->info("§cTest : " . $method . " | 🟥 : " . $e->getMessage());
                         }
                     }
                 }
@@ -87,5 +87,4 @@ class PocketMineTester
             self::getPlugin()->getServer()->shutdown();
         }
     }
-
 }
